@@ -1,57 +1,31 @@
-const { default: faker } = require('@faker-js/faker');
+/* const boom = require('@hapi/boom'); */
+const pool = require('../libs/conection.pool');
 
 class CategoriesService {
   constructor() {
-    this.categories = [
-      {
-        id: '12',
-        name: 'Psicologia',
-        format: 'Fisico',
-      },
-      {
-        id: '25',
-        name: 'Psicologia',
-        format: 'Digital',
-      },
-    ];
+    this.pool = pool;
+    this.pool.on('error', (err) => console.error(err));
   }
 
-  find() {
-    return this.categories;
+  async find() {
+    const query = 'select * from baphystore.category';
+    const consult = await this.pool.query(query);
+    return consult.rows;
   }
 
-  findOne(id) {
-    return this.categories.find((item) => item.id === id);
+  async findOne(id) {
+    return { id };
   }
 
-  create(data) {
-    const newCategory = {
-      id: faker.datatype.uuid(),
-      ...data,
-    };
-    this.categories.push(newCategory);
-    return newCategory;
+  async create(data) {
+    return { data };
   }
 
-  update(id, change) {
-    const index = this.categories.findIndex((item) => item.id === id);
-    if (index === -1) {
-      throw new Error('not found');
-    }
-    const category = this.categories[index];
-    this.categories[index] = {
-      ...category,
-      ...change,
-    };
-    return this.categories[index];
+  async update(id, changes) {
+    return { id, changes };
   }
 
-  delete(id) {
-    const index = this.categories.findIndex((item) => item.id === id);
-    if (index === -1) {
-      throw new Error('not found');
-    }
-    this.categories.splice(index, 1);
+  async delete(id) {
     return { id };
   }
 }

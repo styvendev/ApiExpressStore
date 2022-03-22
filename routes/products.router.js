@@ -1,43 +1,78 @@
 const express = require('express');
 
 const ProductsService = require('../services/products.service');
+const validator = require('../middlewares/validator.data');
+const {
+  getValidator,
+  createValidator,
+  updateValidator,
+} = require('../schemas/products.schema');
 
 const router = express.Router();
 const service = new ProductsService();
 
 //Find
-router.get('/', (req, res) => {
-  const products = service.find();
-  res.json(products);
+router.get('/', async (req, res, next) => {
+  try {
+    const products = await service.find();
+    res.status(200).json(products);
+  } catch (error) {
+    next(error);
+  }
 });
 
 //FindOne
-router.get('/:id', (req, res) => {
-  const { id } = req.params;
-  const product = service.findOne(id);
-  res.json(product);
-});
+router.get(
+  '/:id',
+  validator(getValidator, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const product = await service.findOne(id);
+      res.status(200).json(product);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 //Create
-router.post('/', (req, res) => {
+router.post('/', validator(createValidator, 'body'), async (req, res) => {
   const body = req.body;
-  const newProduct = service.create(body);
+  const newProduct = await service.create(body);
   res.status(201).json(newProduct);
 });
 
 //Update
-router.patch('/:id', (req, res) => {
-  const { id } = req.params;
-  const body = req.body;
-  const product = service.update(id, body);
-  res.json(product);
-});
+router.patch(
+  '/:id',
+  validator(getValidator, 'params'),
+  validator(updateValidator, 'body'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const product = await service.update(id, body);
+      res.json(product);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 //Delete
-router.delete('/:id', (req, res) => {
-  const { id } = req.params;
-  const deleted = service.delete(id);
-  res.json(deleted);
-});
+router.delete(
+  '/:id',
+  validator(getValidator, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const deleted = await service.delete(id);
+      res.json(deleted);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = router;

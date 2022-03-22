@@ -1,60 +1,34 @@
-const { faker } = require('@faker-js/faker');
+/* const boom = require('@hapi/boom'); */
 
-class UsersService {
+const pool = require('../libs/conection.pool');
+
+class UserService {
   constructor() {
-    this.users = [];
-    this.generate();
+    this.pool = pool;
+    this.pool.on('error', (err) => console.error(err));
   }
 
-  generate() {
-    const limit = 20;
-    for (let i = 0; i < limit; i++) {
-      this.users.push({
-        id: faker.datatype.uuid(),
-        email: faker.internet.email(),
-        password: faker.internet.password(),
-      });
-    }
+  async find() {
+    const query = 'select * from baphystore.users';
+    const consult = await this.pool.query(query);
+    return consult.rows;
   }
 
-  find() {
-    return this.users;
+  async findOne(id) {
+    return { id };
   }
 
-  findOne(id) {
-    return this.users.find((item) => item.id === id);
+  async create(data) {
+    return { data };
   }
 
-  create(data) {
-    const newUser = {
-      id: faker.datatype.uuid(),
-      ...data,
-    };
-    this.users.push(newUser);
-    return newUser;
+  async update(id, changes) {
+    return { id, changes };
   }
 
-  update(id, changes) {
-    const index = this.users.findIndex((item) => item.id === id);
-    if (index === -1) {
-      throw new Error('user not found');
-    }
-    const user = this.users[index];
-    this.users[index] = {
-      ...user,
-      ...changes,
-    };
-    return this.users[index];
-  }
-
-  delete(id) {
-    const index = this.users.find((item) => item.id === id);
-    if (index === -1) {
-      throw new Error('user not found');
-    }
-    this.users.splice(index, 1);
+  async delete(id) {
     return { id };
   }
 }
 
-module.exports = UsersService;
+module.exports = UserService;
