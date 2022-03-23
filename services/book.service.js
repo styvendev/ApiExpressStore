@@ -1,15 +1,14 @@
 /* const boom = require('@hapi/boom'); */
-
 const pool = require('../libs/conection.pool');
 
-class UserService {
+class BookService {
   constructor() {
     this.pool = pool;
     this.pool.on('error', (err) => console.error(err));
   }
 
   async find() {
-    const query = 'select * from baphystore.users';
+    const query = 'select * from baphystore.book';
     const consult = await this.pool.query(query);
     return consult.rows;
   }
@@ -19,7 +18,7 @@ class UserService {
   }
 
   async create(data) {
-    return { data };
+    return data;
   }
 
   async update(id, changes) {
@@ -31,4 +30,4 @@ class UserService {
   }
 }
 
-module.exports = UserService;
+module.exports = BookService;
