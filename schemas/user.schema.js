@@ -1,7 +1,7 @@
 const joi = require('joi');
 
 const id = joi.number().integer();
-const email = joi.string().min(15).max(100);
+const email = joi.string().email().min(15).max(100);
 const password = joi.string().min(5).max(100);
 
 const createValidator = joi.object({
@@ -10,8 +10,8 @@ const createValidator = joi.object({
 });
 
 const updateValidator = joi.object({
-  email: email,
-  password: password,
+  email,
+  password,
 });
 
 const getValidator = joi.object({

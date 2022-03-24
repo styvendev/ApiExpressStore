@@ -7,7 +7,7 @@ const {
   getValidator,
   createValidator,
   updateValidator,
-} = require('../schemas/customer.schema');
+} = require('../schemas/user.schema');
 
 const router = express.Router();
 const service = new UserService();
@@ -38,10 +38,14 @@ router.get(
 );
 
 //Create
-router.post('/', validator(createValidator, 'body'), async (req, res) => {
-  const body = req.body;
-  const newUser = await service.create(body);
-  res.status(201).json(newUser);
+router.post('/', validator(createValidator, 'body'), async (req, res, next) => {
+  try {
+    const body = req.body;
+    const newUser = await service.create(body);
+    res.status(201).json(newUser);
+  } catch (error) {
+    next(error);
+  }
 });
 
 //Update

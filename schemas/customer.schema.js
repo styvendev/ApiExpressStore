@@ -3,18 +3,34 @@ const joi = require('joi');
 const id = joi.number().integer();
 const name = joi.string().min(3).max(100);
 const lastname = joi.string().min(3).max(100);
-const numberdocument = joi.number().integer().min(1000);
+const numberDocument = joi.number().integer().min(1000);
+
+const documentName = joi.string().min(5).max(50);
+const email = joi.string().email().min(15).max(100);
+const password = joi.string().min(5).max(100);
+
+const documentId = joi.number().integer();
+const userId = joi.number().integer();
 
 const createValidator = joi.object({
   name: name.required(),
   lastname: lastname.required(),
-  numberdocument: numberdocument.required(),
+  numberDocument: numberDocument.required(),
+  document: joi.object({
+    documentName: documentName.required(),
+  }),
+  user: joi.object({
+    email: email.required(),
+    password: password.required(),
+  }),
 });
 
 const updateValidator = joi.object({
-  name: name,
-  lastname: lastname,
-  numberdocument: numberdocument,
+  name,
+  lastname,
+  numberDocument,
+  documentId,
+  userId,
 });
 
 const getValidator = joi.object({

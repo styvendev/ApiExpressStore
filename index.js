@@ -1,7 +1,7 @@
 const express = require('express');
 var cors = require('cors');
 const routerApi = require('./routes');
-const { global, boom } = require('./middlewares/error.global');
+const { global, orm, boom } = require('./middlewares/error.global');
 
 const app = express();
 const port = 3000;
@@ -18,6 +18,7 @@ routerApi(app);
 
 //middlewares
 app.use(global);
+app.use(orm);
 app.use(boom);
 
 //port

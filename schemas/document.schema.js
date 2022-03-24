@@ -1,17 +1,14 @@
 const joi = require('joi');
 
 const id = joi.number().integer();
-const initials = joi.string().min(2).max(10);
-const name = joi.string().min(5).max(50);
+const documentName = joi.string().min(5).max(50);
 
 const createValidator = joi.object({
-  initials: initials.required(),
-  name: name.required(),
+  documentName: documentName.required(),
 });
 
 const updateValidator = joi.object({
-  initials: initials,
-  name: name,
+  documentName,
 });
 
 const getValidator = joi.object({

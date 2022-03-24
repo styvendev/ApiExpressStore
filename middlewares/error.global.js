@@ -1,6 +1,10 @@
-function global(err, req, res, next) {
-  console.error(err);
-  next(err);
+const { ValidationError } = require('sequelize');
+
+function global(err, req, res) {
+  res.status(500).json({
+    message: err.message,
+    stack: err.stack,
+  });
 }
 
 function boom(err, req, res, next) {
@@ -11,4 +15,15 @@ function boom(err, req, res, next) {
   next(err);
 }
 
-module.exports = { global, boom };
+function orm(err, req, res, next) {
+  if (err instanceof ValidationError) {
+    res.status(409).json({
+      statusCode: 409,
+      name: err.name,
+      message: err.message,
+    });
+  }
+  next(err);
+}
+
+module.exports = { global, boom, orm };

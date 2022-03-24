@@ -1,16 +1,15 @@
 /* const boom = require('@hapi/boom'); */
-const pool = require('../libs/conection.pool');
+const { models } = require('../libs/sequelize');
 
 class CategoryService {
   constructor() {
-    this.pool = pool;
-    this.pool.on('error', (err) => console.error(err));
+    /* this.pool = pool;
+    this.pool.on('error', (err) => console.error(err)); */
   }
 
   async find() {
-    const query = 'select * from baphystore.category';
-    const consult = await this.pool.query(query);
-    return consult.rows;
+    const consult = await models.Category.findAll();
+    return consult;
   }
 
   async findOne(id) {

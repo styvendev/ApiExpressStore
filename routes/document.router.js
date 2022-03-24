@@ -38,10 +38,14 @@ router.get(
 );
 
 //Create
-router.post('/', validator(createValidator, 'body'), async (req, res) => {
-  const body = req.body;
-  const newDocument = await service.create(body);
-  res.status(201).json(newDocument);
+router.post('/', validator(createValidator, 'body'), async (req, res, next) => {
+  try {
+    const body = req.body;
+    const newDocument = await service.create(body);
+    res.status(201).json(newDocument);
+  } catch (error) {
+    next(error);
+  }
 });
 
 //Update

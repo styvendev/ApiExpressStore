@@ -1,31 +1,41 @@
-/* const boom = require('@hapi/boom'); */
-const pool = require('../libs/conection.pool');
+const boom = require('@hapi/boom');
+const { models } = require('../libs/sequelize');
 
 class DocumentService {
   constructor() {
-    this.pool = pool;
-    this.pool.on('error', (err) => console.error(err));
+    /* this.pool = pool;
+    this.pool.on('error', (err) => console.error(err)); */
   }
 
   async find() {
-    const query = 'select * from baphystore.document_type';
-    const consult = await this.pool.query(query);
-    return consult.rows;
+    const consult = await models.Document.findAll();
+    return consult;
   }
 
   async findOne(id) {
-    return { id };
+    const document = await models.Document.findByPk(id, {
+      include: ['customer'],
+    });
+    if (!document) {
+      throw boom.notFound('document not found');
+    }
+    return document;
   }
 
   async create(data) {
-    return { data };
+    const newDocument = await models.Document.create(data);
+    return newDocument;
   }
 
   async update(id, changes) {
-    return { id, changes };
+    const document = await this.findOne(id);
+    const consult = await document.update(changes);
+    return consult;
   }
 
   async delete(id) {
+    const document = await this.findOne(id);
+    await document.destroy();
     return { id };
   }
 }
