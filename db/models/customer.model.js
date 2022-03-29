@@ -8,6 +8,7 @@ const CUSTOMER_TABLE = 'customer';
 const CustomerSchema = {
   id: {
     type: DataTypes.INTEGER,
+    field: 'id',
     autoIncrement: true,
     allowNull: false,
     primaryKey: true,
@@ -15,11 +16,13 @@ const CustomerSchema = {
 
   name: {
     type: DataTypes.STRING,
+    field: 'name',
     allowNull: false,
   },
 
   lastname: {
     type: DataTypes.STRING,
+    field: 'lastname',
     allowNull: false,
   },
 
@@ -58,8 +61,12 @@ const CustomerSchema = {
 
 class Customer extends Model {
   static associate(models) {
-    this.belongsTo(models.Document, { as: 'document' });
     this.belongsTo(models.User, { as: 'user' });
+    this.belongsTo(models.Document, { as: 'document' });
+    this.hasMany(models.CustomerBook, {
+      as: 'relation',
+      foreignKey: 'customerId',
+    });
   }
 
   static config(sequelize) {

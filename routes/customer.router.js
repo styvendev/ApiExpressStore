@@ -29,8 +29,8 @@ router.get(
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const category = await service.findOne(id);
-      res.json(category);
+      const customer = await service.findOne(id);
+      res.json(customer);
     } catch (error) {
       next(error);
     }

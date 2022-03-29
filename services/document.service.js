@@ -14,7 +14,12 @@ class DocumentService {
 
   async findOne(id) {
     const document = await models.Document.findByPk(id, {
-      include: ['customer'],
+      include: [
+        {
+          association: 'customer',
+          include: ['user'],
+        },
+      ],
     });
     if (!document) {
       throw boom.notFound('document not found');

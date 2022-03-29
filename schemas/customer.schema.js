@@ -5,7 +5,6 @@ const name = joi.string().min(3).max(100);
 const lastname = joi.string().min(3).max(100);
 const numberDocument = joi.number().integer().min(1000);
 
-const documentName = joi.string().min(5).max(50);
 const email = joi.string().email().min(15).max(100);
 const password = joi.string().min(5).max(100);
 
@@ -16,9 +15,7 @@ const createValidator = joi.object({
   name: name.required(),
   lastname: lastname.required(),
   numberDocument: numberDocument.required(),
-  document: joi.object({
-    documentName: documentName.required(),
-  }),
+  documentId: documentId.required(),
   user: joi.object({
     email: email.required(),
     password: password.required(),

@@ -5,17 +5,22 @@ const USER_TABLE = 'user';
 const UserSchema = {
   id: {
     type: DataTypes.INTEGER,
+    field: 'id',
     autoIncrement: true,
     allowNull: false,
     primaryKey: true,
   },
+
   email: {
     type: DataTypes.STRING,
+    field: 'email',
     allowNull: false,
     unique: true,
   },
+  
   password: {
     type: DataTypes.STRING,
+    field: 'password',
     allowNull: false,
   },
 };

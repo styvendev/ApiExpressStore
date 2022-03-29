@@ -1,22 +1,22 @@
 const express = require('express');
 
-const BookService = require('../services/book.service');
+const CustomerBookService = require('../services/customer-book.service');
 
 const validator = require('../middlewares/validator.data');
 const {
   getValidator,
   createValidator,
   updateValidator,
-} = require('../schemas/book.schema');
+} = require('../schemas/customer-book.schema');
 
 const router = express.Router();
-const service = new BookService();
+const service = new CustomerBookService();
 
 //Find
 router.get('/', async (req, res, next) => {
   try {
-    const book = await service.find();
-    res.json(book);
+    const relation = await service.find();
+    res.json(relation);
   } catch (error) {
     next(error);
   }
@@ -29,8 +29,8 @@ router.get(
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const book = await service.findOne(id);
-      res.json(book);
+      const relation = await service.findOne(id);
+      res.json(relation);
     } catch (error) {
       next(error);
     }
@@ -41,8 +41,8 @@ router.get(
 router.post('/', validator(createValidator, 'body'), async (req, res, next) => {
   try {
     const body = req.body;
-    const newBook = await service.create(body);
-    res.status(201).json(newBook);
+    const newRelation = await service.create(body);
+    res.status(201).json(newRelation);
   } catch (error) {
     next(error);
   }
@@ -57,15 +57,15 @@ router.patch(
     try {
       const { id } = req.params;
       const body = req.body;
-      const book = await service.update(id, body);
-      res.json(book);
+      const relation = await service.update(id, body);
+      res.json(relation);
     } catch (error) {
       next(error);
     }
   }
 );
 
-//Delete
+//Deleted
 router.delete(
   '/:id',
   validator(getValidator, 'params'),

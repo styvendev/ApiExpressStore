@@ -1,4 +1,4 @@
-/* const boom = require('@hapi/boom'); */
+const boom = require('@hapi/boom');
 const { models } = require('../libs/sequelize');
 
 class BookService {
@@ -8,23 +8,44 @@ class BookService {
   }
 
   async find() {
-    const consult = await models.Book.findAll();
+    const consult = await models.Book.findAll({
+      include: ['category'],
+    });
     return consult;
   }
 
   async findOne(id) {
-    return { id };
+    const book = await models.Book.findByPk(id, {
+      include: [
+        'category',
+        {
+          association: 'relation',
+          include: ['customer'],
+        },
+      ],
+    });
+    if (!book) {
+      throw boom.notFound('book not found');
+    }
+    return book;
   }
 
   async create(data) {
-    return data;
+    const newBook = await models.Book.create(data, {
+      include: ['relation'],
+    });
+    return newBook;
   }
 
   async update(id, changes) {
-    return { id, changes };
+    const book = await this.findOne(id);
+    const consult = await book.update(changes);
+    return consult;
   }
 
   async delete(id) {
+    const book = await this.findOne(id);
+    await book.destroy();
     return { id };
   }
 }
