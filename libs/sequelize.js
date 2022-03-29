@@ -8,7 +8,7 @@ const options = {
   logging: config.prod ? false : true,
 };
 
-if (config.isProd) {
+if (config.prod) {
   options.dialectOptions = {
     ssl: {
       rejectUnauthorized: false,
