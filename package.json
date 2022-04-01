@@ -9,7 +9,8 @@
     "lint": "eslint",
     "migration:generate": "sequelize-cli migration:generate --name",
     "migration:run": "sequelize-cli db:migrate",
-    "migration:revert": "sequelize-cli db:migrate:undo"
+    "migration:revert": "sequelize-cli db:migrate:undo",
+    "migration:delete:data": "sequelize-cli db:seed:undo:all "
   },
   "author": "styven forero",
   "license": "ISC",
