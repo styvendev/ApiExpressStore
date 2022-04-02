@@ -1,7 +1,7 @@
 const joi = require('joi');
 
 const id = joi.number().integer();
-const title = joi.string().min(10).max(100);
+const title = joi.string().min(5).max(100);
 const author = joi.string().min(3).max(100);
 const language = joi.string().min(2).max(20);
 const edition = joi.string().min(2).max(50);

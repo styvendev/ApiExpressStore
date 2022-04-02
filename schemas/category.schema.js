@@ -1,7 +1,7 @@
 const joi = require('joi');
 
 const id = joi.number().integer();
-const name = joi.string().min(5).max(50);
+const name = joi.string().min(3).max(50);
 
 const createValidator = joi.object({
   name: name.required(),
